@@ -1,0 +1,210 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{float}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\pendiente}[1]{\par\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\centering\textbf{[DIAGRAMA PENDIENTE]}\\ #1 \\ \textit{Exportar en alta resoluci\'on desde la herramienta CASE (draw.io / StarUML) y adjuntar como imagen en \texttt{images/}.}}}\par\vspace{4pt}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{PE3 -- ISR-401 -- AquaGest}
+\lhead{UTEQ -- FCCDD}
+\rfoot{\thepage}
+
+\begin{document}
+
+%--------------------------------------------------
+% PORTADA
+%--------------------------------------------------
+
+\begin{titlepage}
+\centering
+
+\textbf{\large UNIVERSIDAD TÉCNICA ESTATAL DE QUEVEDO}\\[0cm]
+
+\includegraphics[width=5cm]{images/logo.png}
+
+\textbf{PRÁCTICA EXPERIMENTAL - UNIDAD II}\\[0.8cm]
+
+\textbf{TEMA:}\\[0.4cm]
+
+AQUAGUEST - SISTEMA PARA LA GESTIÓN INTELIGENTE DE UNA CAMARONERA.\\[0.8cm]
+
+\textbf{INTEGRANTES:}\\[0.5cm]
+
+AMAGUA SACON ROBYN WILLIAN\\[0.5cm]
+CRESPO ESPINOZA KLEBER OBED\\[0.5cm]
+GAMARRA ARAUJO EDHU XAVIER\\[0.5cm]
+PONCE ESPINOZA MERY HELENMAY\\[0.8cm]
+
+\textbf{ASIGNATURA:}\\[0.5cm]
+
+INGENIERÍA DE REQUERIMIENTOS\\[0.5cm]
+
+\textbf{CURSO:}\\[0.2cm]
+
+4TO ``A'' SOFTWARE\\[0.5cm]
+
+\textbf{FECHA:}\\[0.2cm]
+
+13/06/2026\\[0.8cm]
+
+\textbf{DOCENTE:}\\[0.2cm]
+
+ING. GUERRERO ULLOA GLEISTON CICERON\\[0.5cm]
+
+\textbf{LINK DE GITHUB:}\\[0.2cm]
+
+\url{https://github.com/EdhuXav/IR_GA_CorteII_ACGaP}
+\end{titlepage}
+
+
+\tableofcontents
+
+\chapter{Fundamento te\'orico}
+
+\section{Marco normativo aplicado a la especificaci\'on de requisitos}
+
+La especificaci\'on de requisitos del sistema AquaGest se rige por la estructura y contenidos definidos en \cite{iso29148}, que reemplaza al est\'andar hist\'orico IEEE~830:1998 y establece cuatro tipos de documentos de requisitos: StRS (Stakeholder Requirements Specification), SyRS (System Requirements Specification), SRS (Software Requirements Specification) y OpsCon (Operational Concept). La calidad del SRS se eval\'ua mediante los atributos definidos en \cite{iso25010}: completitud, consistencia, verificabilidad, no ambig\"uedad y trazabilidad. El SWEBOK v4.0 \cite{swebok2024}, cap\'itulo 1 (secciones 1.5--1.7), aborda la documentaci\'on y el modelado de requisitos como actividades del ciclo de vida del software. Pohl \cite{pohl2025}, en su Parte IV, cubre en detalle los artefactos de requisitos (glosario, casos de uso, modelos de datos, modelos de comportamiento). Por su parte, \cite{iso15288} establece la trazabilidad desde los requisitos del sistema (StRS/SyRS) hasta los requisitos del software (SRS), lo cual sustenta la matriz de trazabilidad parcial desarrollada en la Secci\'on~\ref{sec:paso5} del presente documento. El est\'andar \cite{iso12207} complementa lo anterior al definir los procesos del ciclo de vida del software en los que se enmarca la ingenier\'ia de requisitos como proceso t\'ecnico.
+
+\section{Documentaci\'on de requisitos}
+
+La documentaci\'on de requisitos consiste en registrar de manera estructurada, verificable y no ambigua las necesidades de los interesados, transform\'andolas en requisitos verificables mediante plantillas de atributos \cite{iso29148,pohl2025}. Para AquaGest se adopt\'o la plantilla de 8 atributos por requisito (ID, Descripci\'on, Tipo, MoSCoW, Fuente, Estabilidad, Estado, Verificable) recomendada por la gu\'ia de la pr\'actica, la cual permite el seguimiento del ciclo de vida de cada requisito desde su elicitaci\'on hasta su verificaci\'on \cite{ireb2022}. La documentaci\'on de requisitos tambi\'en exige el uso de una sintaxis controlada para reducir la ambig\"uedad del lenguaje natural; en este documento se aplica la sintaxis EARS (Easy Approach to Requirements Syntax) para las correcciones de la Secci\'on~\ref{sec:paso1}, siguiendo la notaci\'on documentada por Hull, Jackson y Dick \cite{hull2011}.
+
+\section{Documento ERS/SRS seg\'un IEEE/ISO/IEC 29148:2018}
+
+El SRS, conforme a \cite{iso29148}, formaliza el comportamiento externo observable del software desde la perspectiva del usuario y del sistema, evitando decisiones de dise\~no interno. Su estructura t\'ipica comprende: introducci\'on, descripci\'on general, requisitos espec\'ificos (interfaces externas, requisitos funcionales, no funcionales y restricciones de dise\~no) y anexos de verificaci\'on. El presente documento retoma el SRS parcial de la Entrega~1B del PFC AquaGest (25 RF, 7 RNF, 6 restricciones) y lo somete a un ciclo de refinamiento (Secci\'on~\ref{sec:paso1}) y de modelado complementario en las tres perspectivas de especificaci\'on exigidas por la norma: datos, funci\'on y comportamiento \cite{iso29148,pohl2025}.
+
+\section{Modelos de datos (perspectiva de datos)}
+
+La perspectiva de datos describe la informaci\'on est\'atica que el sistema debe almacenar, sus atributos, claves y relaciones, independientemente de los procesos que la manipulan \cite{maciaszek2007}. Se emplean dos notaciones complementarias: el modelo Entidad-Relaci\'on (ER) en notaci\'on Crow's Foot, que expresa cardinalidades y participaci\'on entre entidades del dominio, y el diagrama de clases UML, que a\~nade comportamiento (operaciones) y visibilidad a las mismas estructuras de datos. La transformaci\'on de ER a clases UML introduce clases asociativas para resolver las relaciones muchos-a-muchos (M:N) del modelo relacional \cite{maciaszek2007}, tal como se aplica en la Secci\'on~\ref{sec:paso2} de este documento para las relaciones Empleado--Estanque y Empleado--Insumo del dominio AquaGest.
+
+\section{Modelos funcionales (perspectiva funcional)}
+
+La perspectiva funcional describe las transformaciones que el sistema realiza sobre los datos, mediante Diagramas de Flujo de Datos (DFD) jer\'arquicos (Nivel~0 o de contexto, Nivel~1 y niveles sucesivos) y diagramas de actividades UML que detallan la l\'ogica de control de un caso de uso espec\'ifico \cite{maciaszek2007,pohl2025}. El DFD esencial, en particular, abstrae los detalles tecnol\'ogicos (interfaces, sensores IoT, formato de mensajes) para exponer \'unicamente la l\'ogica de negocio esencial del proceso, facilitando la verificaci\'on de que ning\'un requisito funcional dependa de una decisi\'on de implementaci\'on prematura \cite{iso29148}.
+
+\section{Modelos de comportamiento (perspectiva de comportamiento)}
+
+La perspectiva de comportamiento captura la din\'amica temporal del sistema: los estados por los que atraviesa una entidad relevante del dominio (m\'aquina de estados UML) y la secuencia temporal de mensajes entre los objetos que colaboran para resolver un caso de uso (diagrama de secuencia UML) \cite{harel1987statecharts}. El formalismo de \emph{statecharts} de Harel \cite{harel1987statecharts} permite representar estados compuestos (jerarqu\'ia y concurrencia), lo cual resulta \'util para modelar entidades del dominio AquaGest cuyo ciclo de vida incluye subestados, como el estanque durante su fase de monitoreo activo (Secci\'on~\ref{sec:paso4}).
+
+\section{Interrelaciones entre las tres perspectivas}
+
+Las tres perspectivas de especificaci\'on --datos, funci\'on y comportamiento-- no son independientes: cada clase del modelo de datos es manipulada por al menos un proceso del modelo funcional (a trav\'es de operaciones CRUD), y cada estado relevante de una entidad del modelo de comportamiento es alcanzado o abandonado por la ejecuci\'on de una actividad del modelo funcional \cite{pohl2025,maciaszek2007}. La consistencia entre las tres perspectivas se verifica mediante verificaciones cruzadas (Secci\'on~\ref{sec:paso5}): entidad--clase, clase--proceso DFD y estado--actividad, siguiendo el enfoque de trazabilidad multi-vista recomendado por \cite{iso15288} y \cite{iso29148}.
+
+\chapter{Paso 1 -- Revisi\'on y refinamiento del SRS parcial}
+\label{sec:paso1}
+
+\section{Registro de defectos identificados}
+
+
+\section{Correcciones EARS aplicadas}
+
+
+
+\section{Tabla de atributos completa (RF y RNF)}
+
+\chapter{Paso 2 -- Modelo de datos: ER y clases UML}
+\label{sec:paso2}
+
+\section{Identificación de entidades}
+
+
+\section{Relaciones y cardinalidades}
+
+\section{Diagrama Entidad-Relación (Crow's Foot)}
+
+
+\section{Verificación de Tercera Forma Normal (3FN)}
+
+
+
+\section{Transformación a Diagrama de Clases UML}
+
+
+
+\chapter{Paso 3 -- Modelo funcional: DFD y actividades UML}
+
+\section{DFD Nivel 0 (Diagrama de Contexto)}
+
+
+
+\section{DFD Nivel 1}
+
+
+\section{DFD Esencial}
+
+
+
+\section{Diagrama de Actividades UML}
+
+
+\chapter{Paso 4 -- Modelo de comportamiento: estados y secuencia}
+
+\section{Selección de la entidad}
+
+
+
+\section{Máquina de Estados UML -- Estanque}
+
+
+\section{Diagrama de Secuencia UML -- Registrar Parámetros del Agua (CU-02)}
+
+
+\chapter{Paso 5 -- Matriz de trazabilidad y tabla comparativa}
+
+
+\section{Matriz de trazabilidad (RF $\times$ modelos)}
+
+
+
+\section{Identificación de gaps y posible gold plating}
+
+
+
+\section{Tabla comparativa de los tres tipos de modelos}
+
+
+\section{Conclusiones}
+
+\chapter{Anexos}
+
+\section*{Anexo A -- Tabla de atributos completa de RF y RNF}
+
+\section*{Anexo B -- Registro de defectos del SRS con correcciones aplicadas}
+
+\section*{Anexo C -- Exportaciones originales de todos los diagramas (alta resolución)}
+
+\section*{Anexo D -- Referencias IEEE y declaración de uso de IA}
+
+\subsection*{Declaración de uso de IA}
+
+
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+\end{document}
+
