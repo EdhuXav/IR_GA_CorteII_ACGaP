@@ -571,11 +571,95 @@ Se selecciona CU-02 por ser el escenario m\'as representativo de la interacci\'o
 
 \chapter{Paso 5 -- Matriz de trazabilidad y tabla comparativa}
 
+\label{sec:paso5}
+
 \section{Matriz de trazabilidad (RF $\times$ modelos)}
+
+La Tabla~\ref{tab:trazabilidad} marca con \checkmark la cobertura de cada RF en cada tipo de modelo: Caso de Uso (CU), Clase UML, Proceso DFD, Diagrama de Actividades (\'unicamente CU-01) y M\'aquina de Estados de Estanque (\'unicamente las transiciones documentadas en la Secci\'on~\ref{sec:paso4}).
+
+{\footnotesize
+\begin{longtable}{L{0.8cm}L{4.3cm}L{2.6cm}L{1.0cm}L{1.0cm}L{1.1cm}}
+\caption{Matriz de trazabilidad: RF $\times$ CU / Clase UML / Proceso DFD / Actividad / Estado.}\label{tab:trazabilidad}\\
+\toprule
+\textbf{RF} & \textbf{Caso de Uso} & \textbf{Clase UML} & \textbf{DFD} & \textbf{Activ.} & \textbf{Estado} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{RF} & \textbf{Caso de Uso} & \textbf{Clase UML} & \textbf{DFD} & \textbf{Activ.} & \textbf{Estado} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RF-01 & Registrar Estanque & Estanque & 1.0 & \checkmark & \checkmark \\
+RF-02 & Registrar Estanque & Estanque & 1.0 & \checkmark & \\
+RF-03 & Registrar Estanque & Estanque & 1.0 & \checkmark & \checkmark \\
+RF-04 & Actualizar Estado de Estanque & Estanque & 1.0 & \checkmark & \checkmark \\
+RF-05 & CU-01 Registrar Siembra & Siembra & 1.0 & \checkmark & \checkmark \\
+RF-06 & CU-01 Registrar Siembra & Grameo & 1.0 & & \\
+RF-07 & Registrar Grameo & Grameo & 1.0 & & \\
+RF-08 & Registrar Grameo & Grameo & 1.0 & & \\
+RF-09 & CU-02 Registrar Par\'ametros del Agua & ParametroAgua & 2.0 & & \checkmark$^{\dagger}$ \\
+RF-10 & CU-02 Registrar Par\'ametros del Agua & ParametroAgua & 2.0 & & \checkmark$^{\dagger}$ \\
+RF-11 & Gestionar Alerta de Agua & AlertaAgua & 2.0 & & \checkmark$^{\dagger}$ \\
+RF-12 & Calcular Raci\'on Diaria & RegistroAlimentacion & 3.0 & & \\
+RF-13 & CU-03 Registrar Alimentaci\'on Diaria & RegistroAlimentacion & 3.0 & & \\
+RF-14 & Calcular Raci\'on Diaria & RegistroAlimentacion & 3.0 & & \\
+RF-15 & Registrar Incidente Sanitario & IncidenteSanitario & 4.0 & & \\
+RF-16 & Registrar Incidente Sanitario & IncidenteSanitario & 4.0 & & \\
+RF-17 & Registrar Empleado & Empleado & 5.0 & & \\
+RF-18 & Asignar Tarea Diaria & TareaDiaria & 5.0 & & \\
+RF-19 & Gestionar Inventario de Insumos & Insumo & 5.0 & & \\
+RF-20 & Gestionar Inventario de Insumos & Insumo & 5.0 & & \\
+RF-21 & Registrar Orden de Mantenimiento & OrdenMantenimiento & 6.0 & & \checkmark \\
+RF-22 & CU-04 Registrar Cosecha & Cosecha & 7.0 & & \checkmark \\
+RF-23 & CU-04 Registrar Cosecha & Cosecha & 7.0 & & \\
+RF-24 & Generar Reporte Comparativo & Cosecha/Estanque & 7.0 & & \\
+RF-25 & CU-05 Generar Predicci\'on de Cosecha \'Optima & PrediccionIA & 8.0 & & \\
+\end{longtable}
+}
+\noindent $^{\dagger}$Cubierto por las transiciones del subestado \texttt{En Monitoreo} de la m\'aquina de estados de Estanque (Secci\'on~\ref{sec:paso4}).
+
+\noindent \textbf{Cobertura:} 25/25 RF (100\,\%) con CU asociado; 25/25 RF (100\,\%) con clase UML asociada; 25/25 RF (100\,\%) con proceso DFD asociado.
+
 \section{Identificaci\'on de gaps y posible gold plating}
+
+\begin{itemize}[leftmargin=1.3cm]
+\item \textbf{Gap~1:} RF-25 (Predicci\'on de cosecha \'optima) no tiene representaci\'on en el diagrama de actividades ni en la m\'aquina de estados de Estanque; su l\'ogica interna reside \'integramente en el m\'odulo de IA externo (RST-05), por lo que se recomienda documentar en la siguiente iteraci\'on un diagrama de secuencia espec\'ifico para CU-05.
+\item \textbf{Gap~2:} RF-06, RF-07 y RF-08 (grameo y crecimiento) no est\'an representados en el diagrama de actividades actual (solo CU-01); se recomienda un segundo diagrama de actividades para el subproceso de seguimiento de crecimiento en la siguiente entrega.
+\item \textbf{Posible gold plating~1:} el estado \texttt{Mantenimiento} de la m\'aquina de estados de Estanque (Secci\'on~\ref{sec:paso4}) no corresponde de forma expl\'icita a ning\'un RF de la Tabla~\ref{tab:atributos}; se infiere razonablemente de RF-21 (\'ordenes de mantenimiento) pero no est\'a formalizado como una transici\'on de estado del estanque en el SRS original. Se recomienda formalizar un RF adicional (``RF-26 -- Suspensi\'on de estanque por mantenimiento'') o eliminar el estado si no se valida con el stakeholder.
+\item \textbf{Posible gold plating~2:} la clase asociativa \texttt{TareaDiaria} incorpora el atributo \texttt{area}, no exigido expl\'icitamente por RF-18; se mantiene por ahora dado que aporta trazabilidad operativa sin contradecir el requisito, pero debe validarse con el Bodeguero/Administrador antes del cierre del Ap\'endice~C.
+\end{itemize}
+
 \section{Tabla comparativa de los tres tipos de modelos}
 
+{\footnotesize
+\begin{longtable}{L{2.3cm}L{3.2cm}L{2.6cm}L{4.0cm}L{3.4cm}}
+\caption{Comparaci\'on de las tres perspectivas de modelado.}\label{tab:comparativa}\\
+\toprule
+\textbf{Modelo} & \textbf{Perspectiva cubierta} & \textbf{Notaci\'on} & \textbf{Qu\'e ayuda a descubrir} & \textbf{Limitaciones} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Modelo} & \textbf{Perspectiva cubierta} & \textbf{Notaci\'on} & \textbf{Qu\'e ayuda a descubrir} & \textbf{Limitaciones} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+ER + Clases UML & Datos (est\'atica) & Crow's Foot; UML clases & Entidades faltantes, atributos ausentes, reglas de cardinalidad (p.\,ej.\ M:N no resueltas), redundancia de datos & No expresa el orden temporal ni las condiciones bajo las cuales cambian los datos \\
+DFD + Actividades UML & Funci\'on (transformaciones) & DFD jer\'arquico; UML actividades & Procesos faltantes o duplicados, decisiones no contempladas, paralelismo entre tareas, dependencia de tecnolog\'ia (DFD esencial) & No modela el ciclo de vida de una entidad ni la concurrencia entre m\'ultiples instancias en el tiempo \\
+Estados + Secuencia UML & Comportamiento (din\'amica temporal) & UML statechart; UML secuencia & Transiciones no controladas, estados inalcanzables, orden incorrecto de mensajes entre componentes, condiciones de carrera & No expresa la estructura de datos subyacente ni la l\'ogica de transformaci\'on completa de un proceso de negocio \\
+\end{longtable}
+}
+
 \section{Conclusiones}
+
+\begin{enumerate}[leftmargin=1.2cm]
+\item Las tres perspectivas de especificaci\'on (datos, funci\'on, comportamiento) son complementarias y no sustituibles entre s\'i: el modelo ER/Clases valid\'o que exist\'ian dos relaciones muchos-a-muchos (Empleado--Estanque, Empleado--Insumo) que el SRS parcial no hab\'ia hecho expl\'icitas, mientras que el DFD confirm\'o que dichas relaciones se materializan en el subproceso~5.0 (Gestionar Empleados e Inventario).
+\item El refinamiento con sintaxis EARS (Paso~1) mostr\'o que el 24\,\% de una muestra de 25 RF (6 de 25) presentaba alg\'un grado de ambig\"uedad o inconsistencia entre su descripci\'on y su criterio de verificaci\'on, lo cual refuerza la necesidad de aplicar una plantilla de atributos de 8 campos de forma sistem\'atica desde la elicitaci\'on inicial.
+\item El modelado de comportamiento (m\'aquina de estados de Estanque) permiti\'o descubrir un posible requisito faltante relacionado con el estado de mantenimiento del estanque (Gap y gold plating identificados en la Secci\'on~5.2), evidenciando que el modelo de comportamiento act\'ua como mecanismo de detecci\'on de huecos que el modelo de datos y el modelo funcional, por s\'i solos, no habr\'ian revelado.
+\item La matriz de trazabilidad (Tabla~\ref{tab:trazabilidad}) confirm\'o una cobertura del 100\,\% de los RF en las perspectivas de datos y funci\'on, pero solo del 20\,\% (5 de 25) en la perspectiva de comportamiento, lo que es esperable dado que no todos los requisitos generan cambios de estado observables en la entidad Estanque, pero sugiere ampliar el modelado de comportamiento a otras entidades (p.\,ej.\ Siembra o AlertaAgua) en iteraciones futuras.
+\item El DFD esencial demostr\'o ser \'util para verificar que RF-09 (registro de par\'ametros del agua) est\'a especificado correctamente a nivel de esencia -- independiente de si el dato proviene de un sensor IoT o de captura manual -- lo cual es coherente con la restricci\'on de dise\~no RST-05 (desacoplamiento del m\'odulo de IA) y con el requisito no funcional RNF-05 (tolerancia a fallos y operaci\'on offline).
+\end{enumerate}
 
 
 
