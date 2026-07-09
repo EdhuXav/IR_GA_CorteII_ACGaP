@@ -221,7 +221,6 @@ RNF-07 & Mantenibilidad: cobertura de pruebas $\geq$60\,\% en m\'odulos cr\'itic
 \noindent \textbf{Cobertura de la tabla de atributos:} 32/32 elementos (100\,\%) cuentan con los 8 atributos completos y son verificables (columna Verif. = S en el 100\,\% de los casos).
 
 \chapter{Paso 2 -- Modelo de datos: ER y clases UML}
-
 \label{sec:paso2}
 
 \section{Identificaci\'on de entidades}
@@ -404,8 +403,6 @@ PrediccionIA & -idPrediccion, -fechaOptimaEstimada, -nivelConfianza & +generarPr
 \end{figure}
 
 
-
-
 \chapter{Paso 3 -- Modelo funcional: DFD y actividades UML}
 \label{sec:paso3}
 
@@ -494,9 +491,7 @@ Administrador & Recibir notificaci\'on (rama alternativa si excede capacidad) \\
     \label{fig:diagrama_contexto}
 \end{figure}
 
-
 \chapter{Paso 4 -- Modelo de comportamiento: estados y secuencia}
-
 \label{sec:paso4}
 
 \section{Selección de la entidad}
@@ -567,10 +562,7 @@ Se selecciona CU-02 por ser el escenario m\'as representativo de la interacci\'o
     \label{fig:diagrama_contexto}
 \end{figure}
 
-
-
 \chapter{Paso 5 -- Matriz de trazabilidad y tabla comparativa}
-
 \label{sec:paso5}
 
 \section{Matriz de trazabilidad (RF $\times$ modelos)}
@@ -661,22 +653,159 @@ Estados + Secuencia UML & Comportamiento (din\'amica temporal) & UML statechart;
 \item El DFD esencial demostr\'o ser \'util para verificar que RF-09 (registro de par\'ametros del agua) est\'a especificado correctamente a nivel de esencia -- independiente de si el dato proviene de un sensor IoT o de captura manual -- lo cual es coherente con la restricci\'on de dise\~no RST-05 (desacoplamiento del m\'odulo de IA) y con el requisito no funcional RNF-05 (tolerancia a fallos y operaci\'on offline).
 \end{enumerate}
 
-
-
 \chapter{Anexos}
 
 \section*{Anexo A -- Tabla de atributos completa de RF y RNF}
-
+{\footnotesize
+\begin{longtable}{L{1.1cm}L{4.6cm}L{1.0cm}L{1.3cm}L{1.3cm}L{1.3cm}L{1.4cm}L{1.1cm}}
+\caption{Tabla de atributos completa de Requisitos Funcionales y No Funcionales.}\label{tab:atributos}\\
+\toprule
+\textbf{ID} & \textbf{Descripci\'on (resumen)} & \textbf{Tipo} & \textbf{MoSCoW} & \textbf{Fuente} & \textbf{Estabilidad} & \textbf{Estado} & \textbf{Verif.} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Descripci\'on (resumen)} & \textbf{Tipo} & \textbf{MoSCoW} & \textbf{Fuente} & \textbf{Estabilidad} & \textbf{Estado} & \textbf{Verif.} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RF-01 & Registro de estanque (ID, nombre, superficie, capacidad, estado) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-02 & C\'alculo de capacidad m\'axima de siembra seg\'un superficie & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-03 & Registro de sobrecarga controlada con justificaci\'on & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-04 & Actualizaci\'on de estado del estanque con auditor\'ia & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-05 & Registro de siembra (fecha, larvas, laboratorio, responsable) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-06 & Registro de grameo semanal (peso promedio) & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-07 & Historial de crecimiento por ciclo productivo & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-08 & Alerta de crecimiento inferior al esperado & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-09 & Registro de par\'ametros del agua (manual/IoT) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-10 & Alerta por par\'ametro de agua fuera de rango & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-11 & Registro de acci\'on correctiva ante alerta de agua & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-12 & C\'alculo de raci\'on diaria seg\'un biomasa estimada & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-13 & Registro de consumo diario de alimento & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-14 & Informe de eficiencia alimenticia (FCR) & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-15 & Registro de incidente sanitario & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-16 & Alerta de mortalidad anormal & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-17 & Registro de empleados (c\'edula \'unica, rol) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-18 & Asignaci\'on y control de tareas diarias & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-19 & Gesti\'on de inventario de insumos & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-20 & Alerta de stock m\'inimo & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-21 & Registro de \'ordenes de mantenimiento & RF & Could & EV-02 & Baja & Propuesto & S \\
+RF-22 & Registro de cosecha (peso, talla, rendimiento) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-23 & C\'alculo de costo de producci\'on & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-24 & Reportes comparativos de producci\'on entre ciclos & RF & Should & EV-01,02 & Media & Aprobado & S \\
+RF-25 & Predicci\'on de momento \'optimo de cosecha (IA) & RF & Could & EV-01 & Baja & Propuesto & S \\
+\midrule
+RNF-01 & Eficiencia de desempe\~no ($\leq$2\,s con 50 usuarios concurrentes) & RNF & Must & EV-01,02 & Estable & Aprobado & S \\
+RNF-02 & Disponibilidad $\geq$98\,\% mensual & RNF & Must & EV-01 & Estable & Aprobado & S \\
+RNF-03 & Usabilidad ($\leq$3 pasos, $\leq$60\,s sin capacitaci\'on) & RNF & Should & EV-02 & Media & Aprobado & S \\
+RNF-04 & Seguridad: RBAC + cifrado de contrase\~nas (bcrypt) & RNF & Must & EV-01 & Estable & Aprobado & S \\
+RNF-05 & Tolerancia a fallos: captura offline y sincronizaci\'on $\geq$95\,\% & RNF & Should & EV-01 & Media & Aprobado & S \\
+RNF-06 & Compatibilidad: Chrome/Firefox v100+, escritorio y tablet Android & RNF & Could & EV-01 & Baja & Propuesto & S \\
+RNF-07 & Mantenibilidad: cobertura de pruebas $\geq$60\,\% en m\'odulos cr\'iticos & RNF & Could & EV-01 & Baja & Propuesto & S \\
+\end{longtable}
+}
 
 \section*{Anexo B -- Registro de defectos del SRS con correcciones aplicadas}
-
+{\footnotesize
+\begin{longtable}{L{1.3cm}L{4.3cm}L{2.2cm}L{6.8cm}}
+\caption{Registro de defectos del SRS parcial y correcci\'on propuesta.}\label{tab:defectos}\\
+\toprule
+\textbf{ID} & \textbf{Defecto} & \textbf{Tipo} & \textbf{Correcci\'on propuesta (sintaxis EARS)} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Defecto} & \textbf{Tipo} & \textbf{Correcci\'on propuesta (sintaxis EARS)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+D-01 & RF-03 usa el verbo no imperativo ``permite'' en lugar de un enunciado ``el sistema debe/shall''; no sigue ninguna de las 5 formas EARS. & Sintaxis / no conformidad EARS & \emph{While} una siembra se encuentre activa en el estanque, \emph{the system shall} permitir registrar una sobrecarga de 1000 a 2000 libras \emph{if} se adjunta una justificaci\'on obligatoria. \\
+D-02 & RF-08 no incluye el umbral cuantitativo (``ganancia $<$ 2\,g'') en la descripci\'on; el umbral solo aparece en el criterio de verificaci\'on, generando doble fuente de verdad. & Incompletitud & \emph{If} la ganancia de peso entre dos grameos consecutivos es menor a 2\,g, \emph{then the system shall} generar una alerta de crecimiento inferior al esperado dentro de las 24 horas siguientes. \\
+D-03 & RF-14 declara la tolerancia de verificación ($\pm$0.05) y el número de ciclos de prueba (3) únicamente en el criterio de aceptación, no en la descripci\'on del requisito. & Inconsistencia (descripción vs.\ verificación) & \emph{The system shall} calcular el FCR del ciclo productivo con una precisión de $\pm$0.05 respecto del cálculo de control manual, verificable en un mínimo de 3 ciclos de prueba. \\
+D-04 & RF-17 exige unicidad de cédula únicamente en el criterio de verificación; la regla de negocio no aparece en la descripci\'on ni en las entradas del requisito. & Incompletitud (regla de negocio no formalizada) & \emph{While} se registra un nuevo empleado, \emph{the system shall} rechazar el registro \emph{if} la c\'edula ingresada ya existe en la base de datos. \\
+D-05 & RNF-03 combina dos condiciones independientes (m\'aximo 3 pasos \textbf{y} máximo 60 segundos) en un solo enunciado, dificultando el dise\~no de pruebas independientes por condición. & Ambig\"uedad estructural (EARS compuesto) & \emph{The system shall} permitir completar el registro de alimentaci\'on diaria en un máximo de 3 pasos. \emph{The system shall} completar dicho registro en un tiempo no mayor a 60 segundos para un operario sin capacitaci\'on previa. \\
+D-06 & Los criterios de verificación de RF-18 y RF-24 presentan un error de redacción recurrente (``100 porciento'' en vez de ``100\,\%'' o ``el 100\,\% de''), lo que introduce imprecisi\'on num\'erica evitable. & Redacción / ortograf\'ia numérica & \emph{The system shall} rechazar el 100\,\% de los intentos de marcar una tarea como completada por un usuario distinto al asignado o a un supervisor, verificado mediante pruebas de control de acceso. \\
+\end{longtable}
+}
 
 \section*{Anexo C -- Exportaciones originales de todos los diagramas (alta resoluci\'on)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_contexto.jpeg}
+    \caption{Diagrama de Contexto del Sistema}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_ER.png}
+    \caption{Diagrama de Entidad Relación del Sistema}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_de_Clases.png}
+    \caption{Diagrama de Clases del Sistema}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/DFD_Nivel1.jpeg}
+    \caption{Diagrama de Flujo de Datos Nivel 1}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth,keepaspectratio]{images/DFD_Ciclo_Productivo_del_Estanque.jpeg}
+    \caption{Diagrama de Flujo de Datos - Ciclo Productivo de Piscinas}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_actividades.jpeg}
+    \caption{Diagrama de Actividades}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_secuencia.jpeg}
+    \caption{Diagrama de Secuencia}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_Máquina_de_Estados.jpeg}
+    \caption{Diagrama de Máquina de Estados}
+    \label{fig:diagrama_contexto}
+\end{figure}
 
 
 
 \section*{Anexo D -- Referencias IEEE y declaración de uso de IA}
 
+\subsection*{Declaraci\'on de uso de IA}
+Se empleó un asistente de IA como herramienta de apoyo puntual durante la
+redacción del presente documento, específicamente para: orientación
+sobre la estructura y el formato exigidos por la guía de la Práctica
+Experimental~3 y la norma IEEE/ISO/IEC~29148:2018; detección y
+corrección de errores ortográficos y de redacción; y aclaración de
+dudas puntuales sobre conceptos de la asignatura (sintaxis EARS,
+notación Crow's Foot, normalización). El análisis de requisitos, la
+identificación de defectos, la reformulación EARS y la construcción de la
+tabla de atributos fueron realizados por el equipo, con criterio propio
+sobre el dominio del proyecto; el uso de la herramienta de IA no
+reemplazó el análisis crítico del equipo y se empleó de forma
+responsable, como apoyo complementario y no como fuente de las
+decisiones técnicas del documento. El contenido derivado del trabajo de
+campo (entrevistas, encuesta, evidencias fotográficas y actas firmadas)
+proviene íntegramente del Apéndice~B del SRS de la Entrega~1B del PFC y
+no fue generado ni alterado por IA.
 
 \bibliographystyle{ieeetr}
 \bibliography{references}
