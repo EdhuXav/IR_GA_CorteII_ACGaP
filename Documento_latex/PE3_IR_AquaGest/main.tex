@@ -89,7 +89,7 @@ ING. GUERRERO ULLOA GLEISTON CICERON\\[0.5cm]
 
 \section{Marco normativo aplicado a la especificación de requisitos}
 
-La especificación de requisitos del sistema AquaGest se rige por la estructura y contenidos definidos en \cite{iso29148}, que reemplaza al estándar histórico IEEE~830:1998 y establece cuatro tipos de documentos de requisitos: StRS (Stakeholder Requirements Specification), SyRS (System Requirements Specification), SRS (Software Requirements Specification) y OpsCon (Operational Concept). La calidad del SRS se eval\'ua mediante los atributos definidos en \cite{iso25010}: completitud, consistencia, verificabilidad, no ambig\"uedad y trazabilidad. El SWEBOK v4.0 \cite{swebok2024}, cap\'itulo 1 (secciones 1.5--1.7), aborda la documentaci\'on y el modelado de requisitos como actividades del ciclo de vida del software. Pohl \cite{pohl2025}, en su Parte IV, cubre en detalle los artefactos de requisitos (glosario, casos de uso, modelos de datos, modelos de comportamiento). Por su parte, \cite{iso15288} establece la trazabilidad desde los requisitos del sistema (StRS/SyRS) hasta los requisitos del software (SRS), lo cual sustenta la matriz de trazabilidad parcial desarrollada en la Secci\'on~\ref{sec:paso5} del presente documento. El estándar \cite{iso12207} complementa lo anterior al definir los procesos del ciclo de vida del software en los que se enmarca la ingeniería de requisitos como proceso técnico. Desde la perspectiva de la gestión de proyectos, el PMBOK Guide 7.\textsuperscript{a} edición \cite{pmi2021pmbok} complementa el marco técnico de \cite{iso29148} al enfatizar la gestión de los requisitos de los interesados (\emph{stakeholder requirements}) como un dominio de desempe\~no continuo del proyecto, lo cual justifica que la Fuente de cada requisito de AquaGest (Secci\'on~\ref{sec:atributos}) quede trazada expl\'icitamente a la entrevista o encuesta que le dio origen.
+La especificación de requisitos del sistema AquaGest se rige por la estructura y contenidos definidos en \cite{iso29148}, que reemplaza al estándar histórico IEEE~830:1998 y establece cuatro tipos de documentos de requisitos: StRS (Stakeholder Requirements Specification), SyRS (System Requirements Specification), SRS (Software Requirements Specification) y OpsCon (Operational Concept). La calidad del SRS se eval\'ua mediante los atributos definidos en \cite{iso25010}: completitud, consistencia, verificabilidad, no ambig\"uedad y trazabilidad. El SWEBOK v4.0 \cite{swebok2024}, cap\'itulo 1 (secciones 1.5--1.7), aborda la documentaci\'on y el modelado de requisitos como actividades del ciclo de vida del software. Pohl \cite{pohl2025}, en su Parte IV, cubre en detalle los artefactos de requisitos (glosario, casos de uso, modelos de datos, modelos de comportamiento). Por su parte, \cite{iso15288} establece la trazabilidad desde los requisitos del sistema (StRS/SyRS) hasta los requisitos del software (SRS), lo cual sustenta la matriz de trazabilidad parcial desarrollada en la Secci\'on~\ref{sec:paso5} del presente documento. El estándar \cite{iso12207} complementa lo anterior al definir los procesos del ciclo de vida del software en los que se enmarca la ingeniería de requisitos como proceso técnico. Desde la perspectiva de la gestión de proyectos, el PMBOK Guide 7.\textsuperscript{a} edición \cite{pmi2021pmbok} complementa el marco técnico de \cite{iso29148} al enfatizar la gestión de los requisitos de los interesados (\emph{stakeholder requirements}) como un dominio de desempe\no continuo del proyecto, lo cual justifica que la Fuente de cada requisito de AquaGest (Secci\'on\ref{sec:atributos}) quede trazada expl\'icitamente a la entrevista o encuesta que le dio origen.
 
 \section{Documentación de requisitos}
 
@@ -101,7 +101,7 @@ El SRS, conforme a \cite{iso29148}, formaliza el comportamiento externo observab
 
 \section{Modelos de datos (perspectiva de datos)}
 
-La perspectiva de datos describe la información estática que el sistema debe almacenar, sus atributos, claves y relaciones, independientemente de los procesos que la manipulan \cite{maciaszek2007}. El modelo Entidad-Relación (ER), formulado originalmente por Chen \cite{chen1976er} como un formalismo unificador entre las vistas de red, relacional y jerárquica de los datos, se emplea aquí en su notación gr\'afica moderna de Crow's Foot, que expresa cardinalidades y participación entre entidades del dominio de forma más compacta que la notación original de Chen. Como segunda notación complementaria se utiliza el diagrama de clases UML, cuya semántica formal de atributos, visibilidad y operaciones est\'a definida en la especificación OMG UML~2.5.1 \cite{omg2017uml}; esta notación a\~nade comportamiento y visibilidad a las mismas estructuras de datos ya validadas en el modelo ER. La transformación de ER a clases UML introduce clases asociativas para resolver las relaciones muchos-a-muchos (M:N) del modelo relacional \cite{maciaszek2007}, tal como se aplica en la Sección~\ref{sec:paso2} de este documento para las relaciones Empleado--Estanque y Empleado--Insumo del dominio AquaGest, cada una con sus respectivas claves foráneas (FK) declaradas explícitamente en las entidades asociativas \texttt{TareaDiaria} y \texttt{MovimientoInventario}.
+La perspectiva de datos describe la información estática que el sistema debe almacenar, sus atributos, claves y relaciones, independientemente de los procesos que la manipulan \cite{maciaszek2007}. El modelo Entidad-Relación (ER), formulado originalmente por Chen \cite{chen1976er} como un formalismo unificador entre las vistas de red, relacional y jerárquica de los datos, se emplea aquí en su notación gr\'afica moderna de Crow's Foot, que expresa cardinalidades y participación entre entidades del dominio de forma más compacta que la notación original de Chen. Como segunda notación complementaria se utiliza el diagrama de clases UML, cuya semántica formal de atributos, visibilidad y operaciones est\'a definida en la especificación OMG UML~2.5.1 \cite{omg2017uml}; esta notación a\nade comportamiento y visibilidad a las mismas estructuras de datos ya validadas en el modelo ER. La transformación de ER a clases UML introduce clases asociativas para resolver las relaciones muchos-a-muchos (M:N) del modelo relacional \cite{maciaszek2007}, tal como se aplica en la Sección\ref{sec:paso2} de este documento para las relaciones Empleado--Estanque y Empleado--Insumo del dominio AquaGest, cada una con sus respectivas claves foráneas (FK) declaradas explícitamente en las entidades asociativas \texttt{TareaDiaria} y \texttt{MovimientoInventario}.
 
 \section{Modelos funcionales (perspectiva funcional)}
 
@@ -114,24 +114,113 @@ La perspectiva de comportamiento captura la dinámica temporal del sistema: los 
 \section{Interrelaciones entre las tres perspectivas}
 
 Las tres perspectivas de especificación --datos, función y comportamiento-- no son independientes: cada clase del modelo de datos es manipulada por al menos un proceso del modelo funcional (a través de operaciones CRUD), y cada estado relevante de una entidad del modelo de comportamiento es alcanzado o abandonado por la ejecución de una actividad del modelo funcional \cite{pohl2025,maciaszek2007}. La consistencia entre las tres perspectivas se verifica mediante verificaciones cruzadas (Sección~\ref{sec:paso5}): entidad--clase, clase--proceso DFD y estado--actividad, siguiendo el enfoque de trazabilidad multi-vista recomendado por \cite{iso15288} y \cite{iso29148}. 
-Esta trazabilidad multi-vista es además consistente con la práctica de gestión de requisitos descrita en el PMBOK Guide \cite{pmi2021pmbok}, que recomienda mantener una matriz de trazabilidad de requisitos como artefacto vivo del proyecto, antecedente directo de la Matriz de Trazabilidad RF~$\times$~Modelos construida en la Sección~\ref{sec:paso5} de este documento.
+Esta trazabilidad multi-vista es además consistente con la práctica de gestión de requisitos descrita en el PMBOK Guide \cite{pmi2021pmbok}, que recomienda mantener una matriz de trazabilidad de requisitos como artefacto vivo del proyecto, antecedente directo de la Matriz de Trazabilidad RF~$\times$Modelos construida en la Sección\ref{sec:paso5} de este documento.
 
 \chapter{Paso 1 -- Revisón y refinamiento del SRS parcial}
 \label{sec:paso1}
 
 \section{Registro de defectos identificados}
 
+Se revisó cada requisito del SRS parcial (Entrega~1B) contra los criterios de calidad de \cite{iso29148} (no ambigüedad, completitud, consistencia, verificabilidad). Se identificaron 6 defectos, documentados en la Tabla~\ref{tab:defectos}.
+
+{\footnotesize
+\begin{longtable}{L{1.3cm}L{4.3cm}L{2.2cm}L{6.8cm}}
+\caption{Registro de defectos del SRS parcial y corrección propuesta.}\label{tab:defectos}\\
+\toprule
+\textbf{ID} & \textbf{Defecto} & \textbf{Tipo} & \textbf{Corrección propuesta (sintaxis EARS)} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Defecto} & \textbf{Tipo} & \textbf{Corrección propuesta (sintaxis EARS)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+D-01 & RF-03 usa el verbo no imperativo ``permite'' en lugar de un enunciado ``el sistema debe/shall''; no sigue ninguna de las 5 formas EARS. & Sintaxis / no conformidad EARS & \emph{While} una siembra se encuentre activa en el estanque, \emph{the system shall} permitir registrar una sobrecarga de 1000 a 2000 libras \emph{if} se adjunta una justificación obligatoria. \\
+D-02 & RF-08 no incluye el umbral cuantitativo (``ganancia $<$ 2\,g'') en la descripción; el umbral solo aparece en el criterio de verificación, generando doble fuente de verdad. & Incompletitud & \emph{If} la ganancia de peso entre dos grameos consecutivos es menor a 2\,g, \emph{then the system shall} generar una alerta de crecimiento inferior al esperado dentro de las 24 horas siguientes. \\
+D-03 & RF-14 declara la tolerancia de verificación ($\pm$0.05) y el n\'umero de ciclos de prueba (3) \'unicamente en el criterio de aceptación, no en la descripción del requisito. & Inconsistencia (descripción vs.\ verificación) & \emph{The system shall} calcular el FCR del ciclo productivo con una precisi\'on de $\pm$0.05 respecto del cálculo de control manual, verificable en un m\'inimo de 3 ciclos de prueba. \\
+D-04 & RF-17 exige unicidad de cédula únicamente en el criterio de verificación; la regla de negocio no aparece en la descripción ni en las entradas del requisito. & Incompletitud (regla de negocio no formalizada) & \emph{While} se registra un nuevo empleado, \emph{the system shall} rechazar el registro \emph{if} la cédula ingresada ya existe en la base de datos. \\
+D-05 & RNF-03 combina dos condiciones independientes (máximo 3 pasos \textbf{y} máximo 60 segundos) en un solo enunciado, dificultando el dise\~no de pruebas independientes por condición. & Ambigüedad estructural (EARS compuesto) & \emph{The system shall} permitir completar el registro de alimentación diaria en un máximo de 3 pasos. \emph{The system shall} completar dicho registro en un tiempo no mayor a 60 segundos para un operario sin capacitación previa. \\
+D-06 & Los criterios de verificación de RF-18 y RF-24 presentan un error de redacción recurrente (``100 porciento'' en vez de ``100\,\%'' o ``el 100\,\% de''), lo que introduce imprecisión numérica evitable. & Redacción / ortografía numérica & \emph{The system shall} rechazar el 100\,\% de los intentos de marcar una tarea como completada por un usuario distinto al asignado o a un supervisor, verificado mediante pruebas de control de acceso. \\
+\end{longtable}
+}
 
 \section{Correcciones EARS aplicadas}
 
+Las cinco formas EARS utilizadas en la Tabla~\ref{tab:defectos} corresponden a los patrones: (a) \emph{ubicuo} (\textit{the system shall...}), (b) \emph{dependiente de estado} (\textit{while [precondición], the system shall...}), (c) \emph{condicional} (\textit{if [condici\'on], then the system shall...}), y (d) \emph{combinado estado + evento} (\textit{while [precondici\'on], the system shall... if [evento]}). A continuaci\'on se presenta, para cada uno de los 6 defectos detectados, el enunciado \textbf{final corregido} que reemplaza la redacci\'on original del requisito en el SRS parcial:
 
+\begin{itemize}[leftmargin=1.4cm]
+\item \textbf{RF-03 (corregido):} \emph{While} una siembra se encuentre activa en el estanque, \emph{the system shall} permitir registrar una sobrecarga de 1000 a 2000 libras \emph{if} se adjunta una justificaci\'on obligatoria.
+\item \textbf{RF-08 (corregido):} \emph{If} la ganancia de peso entre dos grameos consecutivos es menor a 2\,g, \emph{then the system shall} generar una alerta de crecimiento inferior al esperado dentro de las 24 horas siguientes.
+\item \textbf{RF-14 (corregido):} \emph{The system shall} calcular el FCR del ciclo productivo con una precisi\'on de $\pm$0.05 respecto del c\'alculo de control manual, verificable en un m\'inimo de 3 ciclos de prueba.
+\item \textbf{RF-17 (corregido):} \emph{While} se registra un nuevo empleado, \emph{the system shall} rechazar el registro \emph{if} la c\'edula ingresada ya existe en la base de datos.
+\item \textbf{RNF-03 (corregido, dividido en dos requisitos independientes):}
+  \begin{enumerate}[leftmargin=1.1cm]
+  \item \emph{The system shall} permitir completar el registro de alimentaci\'on diaria en un m\'aximo de 3 pasos.
+  \item \emph{The system shall} completar dicho registro en un tiempo no mayor a 60 segundos para un operario sin capacitaci\'on previa.
+  \end{enumerate}
+\item \textbf{RF-18 / RF-24 (corregido, redacci\'on num\'erica):} \emph{The system shall} rechazar el 100\,\% de los intentos de marcar una tarea como completada por un usuario distinto al asignado o a un supervisor, verificado mediante pruebas de control de acceso.
+\end{itemize}
+
+Con estas correcciones, la totalidad de los requisitos afectados por los 6 defectos identificados qued\'o reformulada en sintaxis EARS, con una \'unica condici\'on verificable por enunciado y sin dependencia de informaci\'on que solo apareciera en el criterio de verificaci\'on. Estos enunciados corregidos son los que deben sustituir a la redacci\'on original de RF-03, RF-08, RF-14, RF-17, RNF-03 y RF-18/RF-24 en la pr\'oxima actualizaci\'on del SRS de AquaGest.
 
 \section{Tabla de atributos completa (RF y RNF)}
+\label{sec:atributos}
+
+Se completa la plantilla de 8 atributos (ID, Descripci\'on, Tipo, MoSCoW, Fuente, Estabilidad, Estado, Verificable) para el 100\,\% de los 25 requisitos funcionales y 7 requisitos no funcionales del SRS parcial. \textbf{Fuente:} EV-01 = entrevista a Christian Franco Anchundia (28/05/2026); EV-02 = encuesta a 12 trabajadores (junio 2026). \textbf{Estabilidad} y \textbf{Estado} se asignan seg\\'un el grado de validaci\'on directa con el stakeholder principal (Estable/Aprobado para Must have; Media/Aprobado para Should have; Baja/Propuesto para Could have, dado que dependen de precondiciones futuras como datos hist\'oricos de al menos 2 ciclos productivos, Secci\'on~2.7 del ERS).
+
+{\footnotesize
+\begin{longtable}{L{1.1cm}L{4.6cm}L{1.0cm}L{1.3cm}L{1.3cm}L{1.3cm}L{1.4cm}L{1.1cm}}
+\caption{Tabla de atributos completa de Requisitos Funcionales y No Funcionales.}\label{tab:atributos}\\
+\toprule
+\textbf{ID} & \textbf{Descripci\'on (resumen)} & \textbf{Tipo} & \textbf{MoSCoW} & \textbf{Fuente} & \textbf{Estabilidad} & \textbf{Estado} & \textbf{Verif.} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Descripci\'on (resumen)} & \textbf{Tipo} & \textbf{MoSCoW} & \textbf{Fuente} & \textbf{Estabilidad} & \textbf{Estado} & \textbf{Verif.} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RF-01 & Registro de estanque (ID, nombre, superficie, capacidad, estado) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-02 & C\'alculo de capacidad m\'axima de siembra seg\'un superficie & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-03 & Registro de sobrecarga controlada con justificaci\'on & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-04 & Actualizaci\'on de estado del estanque con auditor\'ia & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-05 & Registro de siembra (fecha, larvas, laboratorio, responsable) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-06 & Registro de grameo semanal (peso promedio) & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-07 & Historial de crecimiento por ciclo productivo & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-08 & Alerta de crecimiento inferior al esperado & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-09 & Registro de par\'ametros del agua (manual/IoT) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-10 & Alerta por par\'ametro de agua fuera de rango & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-11 & Registro de acci\'on correctiva ante alerta de agua & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-12 & C\'alculo de raci\'on diaria seg\'un biomasa estimada & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-13 & Registro de consumo diario de alimento & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-14 & Informe de eficiencia alimenticia (FCR) & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-15 & Registro de incidente sanitario & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-16 & Alerta de mortalidad anormal & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-17 & Registro de empleados (c\'edula \'unica, rol) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-18 & Asignaci\'on y control de tareas diarias & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-19 & Gesti\'on de inventario de insumos & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-20 & Alerta de stock m\'inimo & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-21 & Registro de \'ordenes de mantenimiento & RF & Could & EV-02 & Baja & Propuesto & S \\
+RF-22 & Registro de cosecha (peso, talla, rendimiento) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-23 & C\'alculo de costo de producci\'on & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-24 & Reportes comparativos de producci\'on entre ciclos & RF & Should & EV-01,02 & Media & Aprobado & S \\
+RF-25 & Predicci\'on de momento \'optimo de cosecha (IA) & RF & Could & EV-01 & Baja & Propuesto & S \\
+\midrule
+RNF-01 & Eficiencia de desempe\~no ($\leq$2\,s con 50 usuarios concurrentes) & RNF & Must & EV-01,02 & Estable & Aprobado & S \\
+RNF-02 & Disponibilidad $\geq$98\,\% mensual & RNF & Must & EV-01 & Estable & Aprobado & S \\
+RNF-03 & Usabilidad ($\leq$3 pasos, $\leq$60\,s sin capacitaci\'on) & RNF & Should & EV-02 & Media & Aprobado & S \\
+RNF-04 & Seguridad: RBAC + cifrado de contrase\~nas (bcrypt) & RNF & Must & EV-01 & Estable & Aprobado & S \\
+RNF-05 & Tolerancia a fallos: captura offline y sincronizaci\'on $\geq$95\,\% & RNF & Should & EV-01 & Media & Aprobado & S \\
+RNF-06 & Compatibilidad: Chrome/Firefox v100+, escritorio y tablet Android & RNF & Could & EV-01 & Baja & Propuesto & S \\
+RNF-07 & Mantenibilidad: cobertura de pruebas $\geq$60\,\% en m\'odulos cr\'iticos & RNF & Could & EV-01 & Baja & Propuesto & S \\
+\end{longtable}
+}
+
+\noindent \textbf{Cobertura de la tabla de atributos:} 32/32 elementos (100\,\%) cuentan con los 8 atributos completos y son verificables (columna Verif. = S en el 100\,\% de los casos).
 
 \chapter{Paso 2 -- Modelo de datos: ER y clases UML}
-\label{sec:paso2}
-
-\section{Identificaci\'on de entidades}
 
 \section{Relaciones y cardinalidades}
 
@@ -145,13 +234,15 @@ Esta trazabilidad multi-vista es además consistente con la práctica de gestió
 \section{Transformación a Diagrama de Clases UML}
 
 
-\chapter{Paso 3 -- Modelo funcional: DFD y actividades UML}
 
+\chapter{Paso 3 -- Modelo funcional: DFD y actividades UML}
+\label{sec:paso3}
 
 \section{DFD Nivel 0 (Diagrama de Contexto)}
 
 
 \section{DFD Nivel 1}
+
 
 
 \section{DFD Esencial}
@@ -161,32 +252,19 @@ Esta trazabilidad multi-vista es además consistente con la práctica de gestió
 \section{Diagrama de Actividades UML}
 
 
+
 \chapter{Paso 4 -- Modelo de comportamiento: estados y secuencia}
-\label{sec:paso4}
-
-\section{Selección de la entidad}
-
-
-
-\section{M\'aquina de Estados UML -- Piscinas}
-
-
 
 \section{Diagrama de Secuencia UML -- Registrar Par\'ametros del Agua (CU-02)}
 
 
 
 \chapter{Paso 5 -- Matriz de trazabilidad y tabla comparativa}
-\label{sec:paso5}
-
-\section{Matriz de trazabilidad (RF $\times$ modelos)}
-
-
-\section{Identificaci\'on de gaps y posible gold plating}
-
 
 
 \section{Tabla comparativa de los tres tipos de modelos}
+
+
 
 \section{Conclusiones}
 
@@ -196,15 +274,15 @@ Esta trazabilidad multi-vista es además consistente con la práctica de gestió
 
 \section*{Anexo A -- Tabla de atributos completa de RF y RNF}
 
+
 \section*{Anexo B -- Registro de defectos del SRS con correcciones aplicadas}
 
 
 \section*{Anexo C -- Exportaciones originales de todos los diagramas (alta resoluci\'on)}
 
 
-\section*{Anexo D -- Referencias IEEE y declaración de uso de IA}
 
-\subsection*{Declaraci\'on de uso de IA}
+\section*{Anexo D -- Referencias IEEE y declaración de uso de IA}
 
 
 \bibliographystyle{ieeetr}
