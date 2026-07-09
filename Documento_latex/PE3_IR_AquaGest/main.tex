@@ -402,50 +402,413 @@ PrediccionIA & -idPrediccion, -fechaOptimaEstimada, -nivelConfianza & +generarPr
     \label{fig:diagrama_contexto}
 \end{figure}
 
+
 \chapter{Paso 3 -- Modelo funcional: DFD y actividades UML}
 \label{sec:paso3}
 
 \section{DFD Nivel 0 (Diagrama de Contexto)}
 
+El Diagrama de Contexto (Nivel~0) fue construido en la Entrega~1B del PFC (proceso central \texttt{AquaGest -- Sistema de Gestión Inteligente de Camaronera [Proceso 0]}) y se retoma aquí como base del refinamiento a Nivel~1. Las entidades externas identificadas son: Personal de Gestión (Coordinador/Administrador, Sup.\ Mantenimiento), Personal de Campo (Técnico Acuícola, Operario de Producción, Operador de Maquinaria, Bodeguero), Sensores IoT (agua/ambiente) y Módulo de IA (motor de predicciones). Los flujos de datos de entrada/salida del contexto se mantienen sin cambios respecto de la Entrega~1B.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_contexto.jpeg}
+    \caption{Diagrama de Contexto del Sistema}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
 \section{DFD Nivel 1}
+
+El proceso~0 se descompone en 7 subprocesos con sus almacenes internos, listados en la Tabla~\ref{tab:dfd1}. Los flujos de entrada/salida de cada subproceso se balancean con los flujos del Nivel~0 (mismas entidades externas, mismos flujos agregados).
+
+{\footnotesize
+\begin{longtable}{L{0.9cm}L{4.0cm}L{4.4cm}L{3.4cm}}
+\caption{Subprocesos y almacenes internos del DFD Nivel 1.}\label{tab:dfd1}\\
+\toprule
+\textbf{Proc.} & \textbf{Nombre} & \textbf{Entradas / Salidas principales} & \textbf{Almac\'en interno} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Proc.} & \textbf{Nombre} & \textbf{Entradas / Salidas principales} & \textbf{Almac\'en interno} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+1.0 & Gestionar Estanques y Siembras & Datos de estanque/siembra $\rightarrow$ ficha, estado & D1 Estanques, D2 Siembras/Grameos \\
+2.0 & Monitorear Par\'ametros del Agua & Lecturas manuales/IoT $\rightarrow$ alertas de agua & D3 ParametrosAgua \\
+3.0 & Gestionar Alimentaci\'on & Biomasa, grameo $\rightarrow$ raci\'on, consumo & D4 Alimentaci\'on \\
+4.0 & Gestionar Sanidad & S\'intomas $\rightarrow$ incidente, alerta de mortalidad & D5 Sanidad \\
+5.0 & Gestionar Empleados e Inventario & Movimientos, tareas $\rightarrow$ stock, cumplimiento & D6 Inventario, D8 Empleados/Tareas \\
+6.0 & Gestionar Mantenimiento & Falla reportada $\rightarrow$ orden de mantenimiento & D6b \'Ordenes \\
+7.0 & Gestionar Cosecha y Reportes & Peso, talla $\rightarrow$ rendimiento, reporte comparativo & D7 Cosechas \\
+8.0 & M\'odulo IA (predicciones) & Datos hist\'oricos $\rightarrow$ predicci\'on, anomal\'ia & (externo, desacoplado -- RST-05) \\
+\end{longtable}
+}
+
+\noindent \textbf{Verificaci\'on de balanceo:} las entidades externas y los flujos agregados de entrada/salida del Nivel~1 (Personal de Gesti\'on, Personal de Campo, Sensores IoT, M\'odulo IA) coinciden exactamente con los del Nivel~0; los flujos internos entre subprocesos (p.\,ej.\ 1.0$\rightarrow$3.0 biomasa estimada, 1.0$\rightarrow$2.0 estanque activo) no cruzan la frontera del sistema.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/DFD_Nivel1.jpeg}
+    \caption{Diagrama de Flujo de Datos Nivel 1}
+    \label{fig:diagrama_contexto}
+\end{figure}
 
 \section{DFD Esencial}
 
+Se construye el DFD esencial para el proceso de negocio más importante: el \textbf{ciclo productivo del estanque} (siembra $\rightarrow$ monitoreo $\rightarrow$ alimentaciÓn $\rightarrow$ sanidad $\rightarrow$ cosecha), abstrayendo los detalles tecnol\'ogicos de interfaz y del protocolo IoT (JSON/MQTT, tablets Android) para exponer \'unicamente la transformaci\'on l\'ogica de datos esencial: \emph{Datos de siembra} $\rightarrow$ [Registrar Siembra] $\rightarrow$ \emph{Ciclo activo} $\rightarrow$ [Registrar Grameo/Par\'ametro] $\rightarrow$ \emph{Estado de salud del cultivo} $\rightarrow$ [Ajustar Alimentación/Sanidad] $\rightarrow$ \emph{Cultivo listo para cosecha} $\rightarrow$ [Registrar Cosecha] $\rightarrow$ \emph{Rendimiento y costo}. Ninguna de estas transformaciones esenciales depende de si el dato de entrada proviene de un sensor IoT o de captura manual (RF-09), lo cual confirma que RF-09 está correctamente especificado a nivel de esencia y no de implementaci\'on.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth,keepaspectratio]{images/DFD_Ciclo_Productivo_del_Estanque.jpeg}
+    \caption{Diagrama de Flujo de Datos Nivel del Ciclo Productivo de Piscinas}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
 \section{Diagrama de Actividades UML}
+
+Se modela el diagrama de actividades del caso de uso principal \textbf{CU-01 -- Registrar Siembra} (Sección~4.2 del ERS del PFC), con 3 swimlanes por actor (Operario de Producción, Sistema, Administrador), nodos de decisión (\textit{\textquestiondown cantidad excede capacidad + sobrecarga?}), un fork/join concurrente (notificar al Administrador \textbf{en paralelo} con actualizar el estado del estanque) y un flujo de objeto (\textit{Ficha de Siembra}) que se transmite entre las acciones ``Registrar siembra'' y ``Confirmar registro''.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Swimlane} & \textbf{Acciones} \\
+\hline
+Operario de Producci\'on & Seleccionar estanque $\rightarrow$ Ingresar datos de siembra \\
+\hline
+Sistema & Mostrar capacidad m\'axima (RF-02) $\rightarrow$ Validar cantidad (decisi\'on) $\rightarrow$ Registrar siembra (objeto: Ficha de Siembra) $\rightarrow$ Actualizar estado del estanque $\rightarrow$ Confirmar \\
+\hline
+Administrador & Recibir notificaci\'on (rama alternativa si excede capacidad) \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth,keepaspectratio]{images/Diagrama_actividades.jpeg}
+    \caption{Diagrama de actividades CU-01}
+    \label{fig:diagrama_contexto}
+\end{figure}
 
 \chapter{Paso 4 -- Modelo de comportamiento: estados y secuencia}
 \label{sec:paso4}
 
 \section{Selección de la entidad}
 
+La entidad con mayor número de estados en su ciclo de vida es \textbf{Estanque} (RF-04): preparación, activo, en monitoreo (con subestados de alerta), mantenimiento, cosecha e inactivo -- 6 estados, con un estado compuesto.
+
 \section{M\'aquina de Estados UML -- Piscinas}
 
+
+{\footnotesize
+\begin{longtable}{L{2.8cm}L{2.8cm}L{6.5cm}}
+\caption{Transiciones de la máquina de estados de Estanque.}\label{tab:transiciones}\\
+\toprule
+\textbf{Origen} & \textbf{Destino} & \textbf{evento[condición]/acción} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Origen} & \textbf{Destino} & \textbf{evento[condición]/acción} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Preparaci\'on & Activo & registrarSiembra() [cantidad $\leq$ capacidad+sobrecarga] / activarEstanque() \\
+Activo & En Monitoreo (compuesto) & entrada autom\'atica al recibir el primer par\'ametro de agua \\
+ParametrosNormales & ParametrosEnAlerta (subestado) & parametroRecibido() [valor fuera de rango] / generarAlerta() \\
+ParametrosEnAlerta & ParametrosNormales (subestado) & accionCorrectiva() [alerta atendida] / cerrarAlerta() \\
+Activo & Mantenimiento & fallaEquipo() [equipo crítico afectado] / crearOrdenMantenimiento() \\
+Mantenimiento & Activo & mantenimientoConcluido() / actualizarEstado() \\
+En Monitoreo & Cosecha & criterioDeCosechaAlcanzado() [talla/peso \'optimos o predicci\'on IA] / habilitarCosecha() \\
+Cosecha & Inactivo & registrarCosecha() [datos completos] / cerrarCiclo() \\
+Inactivo & Preparaci\'on & nuevoCiclo() / reiniciarEstanque() \\
+\end{longtable}
+}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_Máquina_de_Estados.jpeg}
+    \caption{Diagrama de Máquina de Estados de Piscinas}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
 \section{Diagrama de Secuencia UML -- Registrar Par\'ametros del Agua (CU-02)}
+
+Se selecciona CU-02 por ser el escenario m\'as representativo de la interacci\'on autom\'atica sensor--sistema, con 5 l\'ineas de vida: \texttt{SensorIoT}, \texttt{GatewayIoT}, \texttt{ControladorMonitoreo}, \texttt{RepositorioDatos} y \texttt{ServicioAlertas}. Incluye un fragmento \texttt{loop} (lectura periódica cada intervalo configurado) y un fragmento \texttt{alt} (valor dentro de rango / fuera de rango), con mensajes as\'incronos (envío de lectura IoT) y síncronos (consulta de rango configurado).
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{|p{2.3cm}|p{9.7cm}|}
+\hline
+\textbf{Fragmento} & \textbf{Contenido} \\
+\hline
+\texttt{loop} [cada intervalo de lectura] & SensorIoT $\dashrightarrow$ GatewayIoT: enviarLectura(valor) \emph{(asíncrono)} \\
+ & GatewayIoT $\rightarrow$ ControladorMonitoreo: registrarParametro(valor) \emph{(síncrono)} \\
+ & ControladorMonitoreo $\rightarrow$ RepositorioDatos: guardar(parametro) \\
+ & ControladorMonitoreo $\rightarrow$ RepositorioDatos: consultarRangoOptimo(tipo) \\
+\hline
+\texttt{alt} [valor dentro de rango] & RepositorioDatos $\rightarrow$ ControladorMonitoreo: rango OK (sin acci\'on adicional) \\
+\texttt{alt} [valor fuera de rango] & ControladorMonitoreo $\rightarrow$ ServicioAlertas: generarAlerta(parametro) \emph{(as\'incrono)} \\
+ & ServicioAlertas $\dashrightarrow$ ControladorMonitoreo: alertaCreada() \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_secuencia.jpeg}
+    \caption{Diagrama de Secuencia CU-02 Parámetros del Agua}
+    \label{fig:diagrama_contexto}
+\end{figure}
 
 \chapter{Paso 5 -- Matriz de trazabilidad y tabla comparativa}
 \label{sec:paso5}
 
 \section{Matriz de trazabilidad (RF $\times$ modelos)}
 
+La Tabla~\ref{tab:trazabilidad} marca con \checkmark la cobertura de cada RF en cada tipo de modelo: Caso de Uso (CU), Clase UML, Proceso DFD, Diagrama de Actividades (\'unicamente CU-01) y M\'aquina de Estados de Estanque (\'unicamente las transiciones documentadas en la Secci\'on~\ref{sec:paso4}).
+
+{\footnotesize
+\begin{longtable}{L{0.8cm}L{4.3cm}L{2.6cm}L{1.0cm}L{1.0cm}L{1.1cm}}
+\caption{Matriz de trazabilidad: RF $\times$ CU / Clase UML / Proceso DFD / Actividad / Estado.}\label{tab:trazabilidad}\\
+\toprule
+\textbf{RF} & \textbf{Caso de Uso} & \textbf{Clase UML} & \textbf{DFD} & \textbf{Activ.} & \textbf{Estado} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{RF} & \textbf{Caso de Uso} & \textbf{Clase UML} & \textbf{DFD} & \textbf{Activ.} & \textbf{Estado} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RF-01 & Registrar Estanque & Estanque & 1.0 & \checkmark & \checkmark \\
+RF-02 & Registrar Estanque & Estanque & 1.0 & \checkmark & \\
+RF-03 & Registrar Estanque & Estanque & 1.0 & \checkmark & \checkmark \\
+RF-04 & Actualizar Estado de Estanque & Estanque & 1.0 & \checkmark & \checkmark \\
+RF-05 & CU-01 Registrar Siembra & Siembra & 1.0 & \checkmark & \checkmark \\
+RF-06 & CU-01 Registrar Siembra & Grameo & 1.0 & & \\
+RF-07 & Registrar Grameo & Grameo & 1.0 & & \\
+RF-08 & Registrar Grameo & Grameo & 1.0 & & \\
+RF-09 & CU-02 Registrar Par\'ametros del Agua & ParametroAgua & 2.0 & & \checkmark$^{\dagger}$ \\
+RF-10 & CU-02 Registrar Par\'ametros del Agua & ParametroAgua & 2.0 & & \checkmark$^{\dagger}$ \\
+RF-11 & Gestionar Alerta de Agua & AlertaAgua & 2.0 & & \checkmark$^{\dagger}$ \\
+RF-12 & Calcular Raci\'on Diaria & RegistroAlimentacion & 3.0 & & \\
+RF-13 & CU-03 Registrar Alimentaci\'on Diaria & RegistroAlimentacion & 3.0 & & \\
+RF-14 & Calcular Raci\'on Diaria & RegistroAlimentacion & 3.0 & & \\
+RF-15 & Registrar Incidente Sanitario & IncidenteSanitario & 4.0 & & \\
+RF-16 & Registrar Incidente Sanitario & IncidenteSanitario & 4.0 & & \\
+RF-17 & Registrar Empleado & Empleado & 5.0 & & \\
+RF-18 & Asignar Tarea Diaria & TareaDiaria & 5.0 & & \\
+RF-19 & Gestionar Inventario de Insumos & Insumo & 5.0 & & \\
+RF-20 & Gestionar Inventario de Insumos & Insumo & 5.0 & & \\
+RF-21 & Registrar Orden de Mantenimiento & OrdenMantenimiento & 6.0 & & \checkmark \\
+RF-22 & CU-04 Registrar Cosecha & Cosecha & 7.0 & & \checkmark \\
+RF-23 & CU-04 Registrar Cosecha & Cosecha & 7.0 & & \\
+RF-24 & Generar Reporte Comparativo & Cosecha/Estanque & 7.0 & & \\
+RF-25 & CU-05 Generar Predicci\'on de Cosecha \'Optima & PrediccionIA & 8.0 & & \\
+\end{longtable}
+}
+\noindent $^{\dagger}$Cubierto por las transiciones del subestado \texttt{En Monitoreo} de la m\'aquina de estados de Estanque (Secci\'on~\ref{sec:paso4}).
+
+\noindent \textbf{Cobertura:} 25/25 RF (100\,\%) con CU asociado; 25/25 RF (100\,\%) con clase UML asociada; 25/25 RF (100\,\%) con proceso DFD asociado.
+
 \section{Identificaci\'on de gaps y posible gold plating}
+
+\begin{itemize}[leftmargin=1.3cm]
+\item \textbf{Gap~1:} RF-25 (Predicci\'on de cosecha \'optima) no tiene representaci\'on en el diagrama de actividades ni en la m\'aquina de estados de Estanque; su l\'ogica interna reside \'integramente en el m\'odulo de IA externo (RST-05), por lo que se recomienda documentar en la siguiente iteraci\'on un diagrama de secuencia espec\'ifico para CU-05.
+\item \textbf{Gap~2:} RF-06, RF-07 y RF-08 (grameo y crecimiento) no est\'an representados en el diagrama de actividades actual (solo CU-01); se recomienda un segundo diagrama de actividades para el subproceso de seguimiento de crecimiento en la siguiente entrega.
+\item \textbf{Posible gold plating~1:} el estado \texttt{Mantenimiento} de la m\'aquina de estados de Estanque (Secci\'on~\ref{sec:paso4}) no corresponde de forma expl\'icita a ning\'un RF de la Tabla~\ref{tab:atributos}; se infiere razonablemente de RF-21 (\'ordenes de mantenimiento) pero no est\'a formalizado como una transici\'on de estado del estanque en el SRS original. Se recomienda formalizar un RF adicional (``RF-26 -- Suspensi\'on de estanque por mantenimiento'') o eliminar el estado si no se valida con el stakeholder.
+\item \textbf{Posible gold plating~2:} la clase asociativa \texttt{TareaDiaria} incorpora el atributo \texttt{area}, no exigido expl\'icitamente por RF-18; se mantiene por ahora dado que aporta trazabilidad operativa sin contradecir el requisito, pero debe validarse con el Bodeguero/Administrador antes del cierre del Ap\'endice~C.
+\end{itemize}
 
 \section{Tabla comparativa de los tres tipos de modelos}
 
+{\footnotesize
+\begin{longtable}{L{2.3cm}L{3.2cm}L{2.6cm}L{4.0cm}L{3.4cm}}
+\caption{Comparaci\'on de las tres perspectivas de modelado.}\label{tab:comparativa}\\
+\toprule
+\textbf{Modelo} & \textbf{Perspectiva cubierta} & \textbf{Notaci\'on} & \textbf{Qu\'e ayuda a descubrir} & \textbf{Limitaciones} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Modelo} & \textbf{Perspectiva cubierta} & \textbf{Notaci\'on} & \textbf{Qu\'e ayuda a descubrir} & \textbf{Limitaciones} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+ER + Clases UML & Datos (est\'atica) & Crow's Foot; UML clases & Entidades faltantes, atributos ausentes, reglas de cardinalidad (p.\,ej.\ M:N no resueltas), redundancia de datos & No expresa el orden temporal ni las condiciones bajo las cuales cambian los datos \\
+DFD + Actividades UML & Funci\'on (transformaciones) & DFD jer\'arquico; UML actividades & Procesos faltantes o duplicados, decisiones no contempladas, paralelismo entre tareas, dependencia de tecnolog\'ia (DFD esencial) & No modela el ciclo de vida de una entidad ni la concurrencia entre m\'ultiples instancias en el tiempo \\
+Estados + Secuencia UML & Comportamiento (din\'amica temporal) & UML statechart; UML secuencia & Transiciones no controladas, estados inalcanzables, orden incorrecto de mensajes entre componentes, condiciones de carrera & No expresa la estructura de datos subyacente ni la l\'ogica de transformaci\'on completa de un proceso de negocio \\
+\end{longtable}
+}
+
 \section{Conclusiones}
+
+\begin{enumerate}[leftmargin=1.2cm]
+\item Las tres perspectivas de especificaci\'on (datos, funci\'on, comportamiento) son complementarias y no sustituibles entre s\'i: el modelo ER/Clases valid\'o que exist\'ian dos relaciones muchos-a-muchos (Empleado--Estanque, Empleado--Insumo) que el SRS parcial no hab\'ia hecho expl\'icitas, mientras que el DFD confirm\'o que dichas relaciones se materializan en el subproceso~5.0 (Gestionar Empleados e Inventario).
+\item El refinamiento con sintaxis EARS (Paso~1) mostr\'o que el 24\,\% de una muestra de 25 RF (6 de 25) presentaba alg\'un grado de ambig\"uedad o inconsistencia entre su descripci\'on y su criterio de verificaci\'on, lo cual refuerza la necesidad de aplicar una plantilla de atributos de 8 campos de forma sistem\'atica desde la elicitaci\'on inicial.
+\item El modelado de comportamiento (m\'aquina de estados de Estanque) permiti\'o descubrir un posible requisito faltante relacionado con el estado de mantenimiento del estanque (Gap y gold plating identificados en la Secci\'on~5.2), evidenciando que el modelo de comportamiento act\'ua como mecanismo de detecci\'on de huecos que el modelo de datos y el modelo funcional, por s\'i solos, no habr\'ian revelado.
+\item La matriz de trazabilidad (Tabla~\ref{tab:trazabilidad}) confirm\'o una cobertura del 100\,\% de los RF en las perspectivas de datos y funci\'on, pero solo del 20\,\% (5 de 25) en la perspectiva de comportamiento, lo que es esperable dado que no todos los requisitos generan cambios de estado observables en la entidad Estanque, pero sugiere ampliar el modelado de comportamiento a otras entidades (p.\,ej.\ Siembra o AlertaAgua) en iteraciones futuras.
+\item El DFD esencial demostr\'o ser \'util para verificar que RF-09 (registro de par\'ametros del agua) est\'a especificado correctamente a nivel de esencia -- independiente de si el dato proviene de un sensor IoT o de captura manual -- lo cual es coherente con la restricci\'on de dise\~no RST-05 (desacoplamiento del m\'odulo de IA) y con el requisito no funcional RNF-05 (tolerancia a fallos y operaci\'on offline).
+\end{enumerate}
 
 \chapter{Anexos}
 
 \section*{Anexo A -- Tabla de atributos completa de RF y RNF}
+{\footnotesize
+\begin{longtable}{L{1.1cm}L{4.6cm}L{1.0cm}L{1.3cm}L{1.3cm}L{1.3cm}L{1.4cm}L{1.1cm}}
+\caption{Tabla de atributos completa de Requisitos Funcionales y No Funcionales.}\label{tab:atributos}\\
+\toprule
+\textbf{ID} & \textbf{Descripci\'on (resumen)} & \textbf{Tipo} & \textbf{MoSCoW} & \textbf{Fuente} & \textbf{Estabilidad} & \textbf{Estado} & \textbf{Verif.} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Descripci\'on (resumen)} & \textbf{Tipo} & \textbf{MoSCoW} & \textbf{Fuente} & \textbf{Estabilidad} & \textbf{Estado} & \textbf{Verif.} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RF-01 & Registro de estanque (ID, nombre, superficie, capacidad, estado) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-02 & C\'alculo de capacidad m\'axima de siembra seg\'un superficie & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-03 & Registro de sobrecarga controlada con justificaci\'on & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-04 & Actualizaci\'on de estado del estanque con auditor\'ia & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-05 & Registro de siembra (fecha, larvas, laboratorio, responsable) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-06 & Registro de grameo semanal (peso promedio) & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-07 & Historial de crecimiento por ciclo productivo & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-08 & Alerta de crecimiento inferior al esperado & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-09 & Registro de par\'ametros del agua (manual/IoT) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-10 & Alerta por par\'ametro de agua fuera de rango & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-11 & Registro de acci\'on correctiva ante alerta de agua & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-12 & C\'alculo de raci\'on diaria seg\'un biomasa estimada & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-13 & Registro de consumo diario de alimento & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-14 & Informe de eficiencia alimenticia (FCR) & RF & Should & EV-01 & Media & Aprobado & S \\
+RF-15 & Registro de incidente sanitario & RF & Must & EV-01 & Estable & Aprobado & S \\
+RF-16 & Alerta de mortalidad anormal & RF & Must & EV-01,02 & Estable & Aprobado & S \\
+RF-17 & Registro de empleados (c\'edula \'unica, rol) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-18 & Asignaci\'on y control de tareas diarias & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-19 & Gesti\'on de inventario de insumos & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-20 & Alerta de stock m\'inimo & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-21 & Registro de \'ordenes de mantenimiento & RF & Could & EV-02 & Baja & Propuesto & S \\
+RF-22 & Registro de cosecha (peso, talla, rendimiento) & RF & Must & EV-02 & Estable & Aprobado & S \\
+RF-23 & C\'alculo de costo de producci\'on & RF & Should & EV-02 & Media & Aprobado & S \\
+RF-24 & Reportes comparativos de producci\'on entre ciclos & RF & Should & EV-01,02 & Media & Aprobado & S \\
+RF-25 & Predicci\'on de momento \'optimo de cosecha (IA) & RF & Could & EV-01 & Baja & Propuesto & S \\
+\midrule
+RNF-01 & Eficiencia de desempe\~no ($\leq$2\,s con 50 usuarios concurrentes) & RNF & Must & EV-01,02 & Estable & Aprobado & S \\
+RNF-02 & Disponibilidad $\geq$98\,\% mensual & RNF & Must & EV-01 & Estable & Aprobado & S \\
+RNF-03 & Usabilidad ($\leq$3 pasos, $\leq$60\,s sin capacitaci\'on) & RNF & Should & EV-02 & Media & Aprobado & S \\
+RNF-04 & Seguridad: RBAC + cifrado de contrase\~nas (bcrypt) & RNF & Must & EV-01 & Estable & Aprobado & S \\
+RNF-05 & Tolerancia a fallos: captura offline y sincronizaci\'on $\geq$95\,\% & RNF & Should & EV-01 & Media & Aprobado & S \\
+RNF-06 & Compatibilidad: Chrome/Firefox v100+, escritorio y tablet Android & RNF & Could & EV-01 & Baja & Propuesto & S \\
+RNF-07 & Mantenibilidad: cobertura de pruebas $\geq$60\,\% en m\'odulos cr\'iticos & RNF & Could & EV-01 & Baja & Propuesto & S \\
+\end{longtable}
+}
 
 \section*{Anexo B -- Registro de defectos del SRS con correcciones aplicadas}
+{\footnotesize
+\begin{longtable}{L{1.3cm}L{4.3cm}L{2.2cm}L{6.8cm}}
+\caption{Registro de defectos del SRS parcial y correcci\'on propuesta.}\label{tab:defectos}\\
+\toprule
+\textbf{ID} & \textbf{Defecto} & \textbf{Tipo} & \textbf{Correcci\'on propuesta (sintaxis EARS)} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Defecto} & \textbf{Tipo} & \textbf{Correcci\'on propuesta (sintaxis EARS)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+D-01 & RF-03 usa el verbo no imperativo ``permite'' en lugar de un enunciado ``el sistema debe/shall''; no sigue ninguna de las 5 formas EARS. & Sintaxis / no conformidad EARS & \emph{While} una siembra se encuentre activa en el estanque, \emph{the system shall} permitir registrar una sobrecarga de 1000 a 2000 libras \emph{if} se adjunta una justificaci\'on obligatoria. \\
+D-02 & RF-08 no incluye el umbral cuantitativo (``ganancia $<$ 2\,g'') en la descripci\'on; el umbral solo aparece en el criterio de verificaci\'on, generando doble fuente de verdad. & Incompletitud & \emph{If} la ganancia de peso entre dos grameos consecutivos es menor a 2\,g, \emph{then the system shall} generar una alerta de crecimiento inferior al esperado dentro de las 24 horas siguientes. \\
+D-03 & RF-14 declara la tolerancia de verificación ($\pm$0.05) y el número de ciclos de prueba (3) únicamente en el criterio de aceptación, no en la descripci\'on del requisito. & Inconsistencia (descripción vs.\ verificación) & \emph{The system shall} calcular el FCR del ciclo productivo con una precisión de $\pm$0.05 respecto del cálculo de control manual, verificable en un mínimo de 3 ciclos de prueba. \\
+D-04 & RF-17 exige unicidad de cédula únicamente en el criterio de verificación; la regla de negocio no aparece en la descripci\'on ni en las entradas del requisito. & Incompletitud (regla de negocio no formalizada) & \emph{While} se registra un nuevo empleado, \emph{the system shall} rechazar el registro \emph{if} la c\'edula ingresada ya existe en la base de datos. \\
+D-05 & RNF-03 combina dos condiciones independientes (m\'aximo 3 pasos \textbf{y} máximo 60 segundos) en un solo enunciado, dificultando el dise\~no de pruebas independientes por condición. & Ambig\"uedad estructural (EARS compuesto) & \emph{The system shall} permitir completar el registro de alimentaci\'on diaria en un máximo de 3 pasos. \emph{The system shall} completar dicho registro en un tiempo no mayor a 60 segundos para un operario sin capacitaci\'on previa. \\
+D-06 & Los criterios de verificación de RF-18 y RF-24 presentan un error de redacción recurrente (``100 porciento'' en vez de ``100\,\%'' o ``el 100\,\% de''), lo que introduce imprecisi\'on num\'erica evitable. & Redacción / ortograf\'ia numérica & \emph{The system shall} rechazar el 100\,\% de los intentos de marcar una tarea como completada por un usuario distinto al asignado o a un supervisor, verificado mediante pruebas de control de acceso. \\
+\end{longtable}
+}
 
 \section*{Anexo C -- Exportaciones originales de todos los diagramas (alta resoluci\'on)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_contexto.jpeg}
+    \caption{Diagrama de Contexto del Sistema}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_ER.png}
+    \caption{Diagrama de Entidad Relación del Sistema}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_de_Clases.png}
+    \caption{Diagrama de Clases del Sistema}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/DFD_Nivel1.jpeg}
+    \caption{Diagrama de Flujo de Datos Nivel 1}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth,keepaspectratio]{images/DFD_Ciclo_Productivo_del_Estanque.jpeg}
+    \caption{Diagrama de Flujo de Datos - Ciclo Productivo de Piscinas}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_actividades.jpeg}
+    \caption{Diagrama de Actividades}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_secuencia.jpeg}
+    \caption{Diagrama de Secuencia}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{images/Diagrama_Máquina_de_Estados.jpeg}
+    \caption{Diagrama de Máquina de Estados}
+    \label{fig:diagrama_contexto}
+\end{figure}
+
+
 
 \section*{Anexo D -- Referencias IEEE y declaración de uso de IA}
 
 \subsection*{Declaraci\'on de uso de IA}
+Se empleó un asistente de IA como herramienta de apoyo puntual durante la
+redacción del presente documento, específicamente para: orientación
+sobre la estructura y el formato exigidos por la guía de la Práctica
+Experimental~3 y la norma IEEE/ISO/IEC~29148:2018; detección y
+corrección de errores ortográficos y de redacción; y aclaración de
+dudas puntuales sobre conceptos de la asignatura (sintaxis EARS,
+notación Crow's Foot, normalización). El análisis de requisitos, la
+identificación de defectos, la reformulación EARS y la construcción de la
+tabla de atributos fueron realizados por el equipo, con criterio propio
+sobre el dominio del proyecto; el uso de la herramienta de IA no
+reemplazó el análisis crítico del equipo y se empleó de forma
+responsable, como apoyo complementario y no como fuente de las
+decisiones técnicas del documento. El contenido derivado del trabajo de
+campo (entrevistas, encuesta, evidencias fotográficas y actas firmadas)
+proviene íntegramente del Apéndice~B del SRS de la Entrega~1B del PFC y
+no fue generado ni alterado por IA.
 
 \bibliographystyle{ieeetr}
 \bibliography{references}
 
 \end{document}
+
